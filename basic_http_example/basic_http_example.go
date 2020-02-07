@@ -19,15 +19,22 @@ func main() {
 }
 
 type helloWorldResponse struct {
-	Message string
+	Message string `json:"message"`
+	Author  string `json:"-"`
+	Date    string `json:",omitempty"`
+	Id      int    `json:"id, string"`
 }
 
 func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	response := helloWorldResponse{Message: "HelloWorld"}
-	data, err := json.Marshal(response)
-	if err != nil {
-		panic("Ooops")
-	}
+	encoder := json.NewEncoder(w)
+	encoder.Encode(&response)
+	/*
+		data, err := json.Marshal(response)
+		if err != nil {
+			panic("Ooops")
+		}
 
-	fmt.Fprint(w, string(data))
+		fmt.Fprint(w, string(data))
+	*/
 }
