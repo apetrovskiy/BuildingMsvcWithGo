@@ -1,10 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 )
+
+const HelloWorldString = "Hello World\n"
 
 func main() {
 	port := 8080
@@ -15,6 +18,16 @@ func main() {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }
 
+type helloWorldResponse struct {
+	Message string
+}
+
 func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello World\n")
+	response := helloWorldResponse{Message: "HelloWorld"}
+	data, err := json.Marshal(response)
+	if err != nil {
+		panic("Ooops")
+	}
+
+	fmt.Fprint(w, string(data))
 }
